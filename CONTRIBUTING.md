@@ -397,12 +397,5 @@ Mantener `CHANGELOG.md` actualizado:
 - Corrección en cálculo de hash de seguridad
 ```
 
-## 📞 Contacto
-
-- **Issues**: [GitHub Issues](https://github.com/tu-org/emvcode/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/tu-org/emvcode/discussions)
-- **Email**: emvcode@tudominio.com
-
----
 
 ¡Gracias por contribuir a EMVCode! 🎉

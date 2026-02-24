@@ -1,0 +1,44 @@
+{
+  "name": "emvcode",
+  "version": "0.1.0",
+  "description": "EMVCo dev tools",
+  "keywords": [
+    "EMVCo",
+    "payment",
+    "card",
+    "typescript"
+  ],
+  "license": "MIT",
+  "author": "Juan Bautista",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/obfuscate.js",
+    "test": "jest --clearCache && jest --coverage",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build && npm test",
+    "dev": "ts-node src/index.ts",
+    "obfuscate": "node scripts/obfuscate.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "javascript-obfuscator": "^5.1.0",
+    "jest": "^29.5.0",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "dijkstrajs": "1.0.3"
+  }
+}

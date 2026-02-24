@@ -1,0 +1,17 @@
+# Source files
+src/
+tsconfig.json
+jest.config.js
+
+# Tests
+**/*.test.ts
+**/*.spec.ts
+coverage/
+
+# Development
+.gitignore
+.vscode/
+.idea/
+
+# CI/CD
+.github/

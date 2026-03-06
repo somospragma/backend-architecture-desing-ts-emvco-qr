@@ -1,0 +1,43 @@
+name: Publish npm package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    name: Build, test and publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: ${{ secrets.PRAGMA_NPM_REGISTRY_URL }}
+
+      - name: Configure Artifactory credentials
+        run: |
+          REGISTRY_HOST=$(echo "${{ secrets.PRAGMA_NPM_REGISTRY_URL }}" | sed 's|https:||')
+          npm config set "${REGISTRY_HOST}:_authToken" "${{ secrets.PRAGMA_NPM_AUTH_TOKEN }}"
+          npm config set always-auth true
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Publish package
+        run: npm publish --access restricted
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PRAGMA_NPM_AUTH_TOKEN }}

@@ -33,7 +33,6 @@ jobs:
 
           npm config set registry "${REGISTRY_URL}/"
           npm config set "//${REGISTRY_AUTH}/:_authToken" "${NODE_AUTH_TOKEN}"
-          npm config set always-auth true
 
       - name: Install dependencies
         run: npm ci

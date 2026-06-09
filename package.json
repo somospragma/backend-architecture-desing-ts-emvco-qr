@@ -1,5 +1,5 @@
 {
-  "name": "emvcode",
+  "name": "@somospragma/emvcode",
   "version": "1.0.0",
   "description": "EMVCo dev tools",
   "keywords": [

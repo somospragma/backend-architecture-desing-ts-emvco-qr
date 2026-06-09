@@ -32,12 +32,8 @@ jobs:
           REGISTRY_AUTH="${REGISTRY_AUTH#https://}"
 
           npm config set registry "${REGISTRY_URL}/"
+          npm config set "@somospragma:registry" "${REGISTRY_URL}/"
           npm config set "//${REGISTRY_AUTH}/:_authToken" "${NODE_AUTH_TOKEN}"
-
-      - name: Verify npm authentication
-        run: |
-          REGISTRY_URL="${NPM_REGISTRY_URL%/}"
-          npm whoami --registry "${REGISTRY_URL}/"
 
       - name: Install dependencies
         run: npm ci
@@ -51,4 +47,4 @@ jobs:
       - name: Publish package
         run: |
           REGISTRY_URL="${NPM_REGISTRY_URL%/}"
-          npm publish --registry "${REGISTRY_URL}/"
+          npm publish --registry "${REGISTRY_URL}/" --access restricted

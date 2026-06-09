@@ -2,7 +2,7 @@
 
 **Herramientas de desarrollo EMVCo para aplicaciones de pago modernas**
 
-[![npm version](https://img.shields.io/npm/v/emvcode.svg)](https://www.npmjs.com/package/emvcode)
+[![npm version](https://img.shields.io/npm/v/@somospragma/emvcode.svg)](https://www.npmjs.com/package/@somospragma/emvcode)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 EMVCode es una librería completa para trabajar con códigos QR EMVCo, tags EMV, validación CRC y generación de códigos de seguridad. Perfecta para desarrollar aplicaciones de pago, billeteras digitales y sistemas de cobro.
@@ -12,7 +12,7 @@ EMVCode es una librería completa para trabajar con códigos QR EMVCo, tags EMV,
 ## 📦 Instalación
 
 ```bash
-npm install emvcode
+npm install @somospragma/emvcode
 ```
 
 ---
@@ -34,7 +34,7 @@ npm install emvcode
 ### Construcción Básica de QR EMVCo
 
 ```typescript
-import { EMVCoContentBuilder } from "emvcode";
+import { EMVCoContentBuilder } from "@somospragma/emvcode";
 
 const emv = new EMVCoContentBuilder();
 const ACQUIRER_ID = "COM.CO.MIPAGO";
@@ -86,7 +86,7 @@ console.log(qrString);
 ### Construcción Semántica (Recomendado)
 
 ```typescript
-import { EMVCoContentSemanticBuilder, EMVField } from "emvcode";
+import { EMVCoContentSemanticBuilder, EMVField } from "@somospragma/emvcode";
 
 const ACQUIRER_ID = "COM.CO.MIPAGO";
 const emv = new EMVCoContentSemanticBuilder();
@@ -238,7 +238,7 @@ emv.setMerchantAccountGUI("COM.CO.MIPAGO.LLA");
 Establece el ID del comercio con el tipo de identificador.
 
 ```typescript
-import { EMVField } from "emvcode";
+import { EMVField } from "@somospragma/emvcode";
 
 emv.setMerchantAccountId("123456789", EMVField.MERCHANT_ACCOUNT_MERCHANT_ID);
 // Otros tipos disponibles:
@@ -573,7 +573,7 @@ Genera imágenes QR en formato Base64.
 Genera un QR en formato base64 comprimido (incluye el tamaño en el string).
 
 ```typescript
-import { QRCodeService } from "emvcode";
+import { QRCodeService } from "@somospragma/emvcode";
 
 const qrBase64 = QRCodeService.createBase64({
   content: qrString,
@@ -587,7 +587,7 @@ const qrBase64 = QRCodeService.createBase64({
 Convierte el base64 generado por createBase64 a una imagen PNG.
 
 ```typescript
-import { QRCodeService, BinaryToPng } from "emvcode";
+import { QRCodeService, BinaryToPng } from "@somospragma/emvcode";
 (async function () {
   // Generar QR
   const qrBase64 = QRCodeService.createBase64({
@@ -640,7 +640,7 @@ Cálculo y validación de CRC16-CCITT.
 Calcula el CRC16 de una cadena.
 
 ```typescript
-import { CRCService } from "emvcode";
+import { CRCService } from "@somospragma/emvcode";
 
 const crc = CRCService.calculateCRC16("00020101021152045411");
 console.log(crc); // 'A1B2'
@@ -666,7 +666,7 @@ Genera códigos de seguridad SHA-256 para transacciones.
 #### Ejemplo Completo
 
 ```typescript
-import { HashCodeBuilder } from "emvcode";
+import { HashCodeBuilder } from "@somospragma/emvcode";
 
 const securityHash = await new HashCodeBuilder()
   .setUniqueCode("123456789")
@@ -700,7 +700,7 @@ Utilidades para conversión entre binario y hexadecimal.
 #### `hexToBinary(hex: string): string`
 
 ```typescript
-import { BinaryHexConverter } from "emvcode";
+import { BinaryHexConverter } from "@somospragma/emvcode";
 
 const binary = BinaryHexConverter.hexToBinary("FF");
 console.log(binary); // '11111111'
@@ -726,7 +726,7 @@ console.log(hex2); // 'a'
 ### Ejemplo 1: QR de Pago Simple
 
 ```typescript
-import { EMVCoContentSemanticBuilder, QRCodeService } from "emvcode";
+import { EMVCoContentSemanticBuilder, QRCodeService } from "@somospragma/emvcode";
 
 async function generarQRPago() {
   const emv = new EMVCoContentSemanticBuilder();
@@ -761,7 +761,7 @@ import {
   HashCodeBuilder,
   EMVField,
   QRCodeService,
-} from "emvcode";
+} from "@somospragma/emvcode";
 
 async function generarQRSeguro() {
   const ACQUIRER = "COM.CO.MIPAGO";
@@ -814,7 +814,7 @@ async function generarQRSeguro() {
 ### Ejemplo 3: QR con Impuestos
 
 ```typescript
-import { EMVCoContentSemanticBuilder } from "emvcode";
+import { EMVCoContentSemanticBuilder } from "@somospragma/emvcode";
 
 function generarQRConImpuestos() {
   const ACQUIRER = "COM.CO.MIPAGO";
@@ -847,7 +847,7 @@ function generarQRConImpuestos() {
 ### Ejemplo 4: Validación de QR
 
 ```typescript
-import { CRCService } from "emvcode";
+import { CRCService } from "@somospragma/emvcode";
 
 function validarQR(qrString: string): boolean {
   // Validar CRC
@@ -1231,7 +1231,7 @@ Genera imágenes QR en formato Base64.
 Genera un QR en formato base64 comprimido (incluye el tamaño en el string).
 
 ```typescript
-import { QRCodeService } from "emvcode";
+import { QRCodeService } from "@somospragma/emvcode";
 
 const qrBase64 = QRCodeService.createBase64({
   content: qrString,
@@ -1245,7 +1245,7 @@ const qrBase64 = QRCodeService.createBase64({
 Convierte el base64 generado por createBase64 a una imagen PNG.
 
 ```typescript
-import { QRCodeService, BinaryToPng } from "emvcode";
+import { QRCodeService, BinaryToPng } from "@somospragma/emvcode";
 (async function () {
   // Generar QR
   const qrBase64 = QRCodeService.createBase64({
@@ -1298,7 +1298,7 @@ Cálculo y validación de CRC16-CCITT.
 Calcula el CRC16 de una cadena.
 
 ```typescript
-import { CRCService } from "emvcode";
+import { CRCService } from "@somospragma/emvcode";
 
 const crc = CRCService.calculateCRC16("00020101021152045411");
 console.log(crc); // 'A1B2'
@@ -1324,7 +1324,7 @@ Genera códigos de seguridad SHA-256 para transacciones.
 #### Ejemplo Completo
 
 ```typescript
-import { HashCodeBuilder } from "emvcode";
+import { HashCodeBuilder } from "@somospragma/emvcode";
 
 const securityHash = await new HashCodeBuilder()
   .setUniqueCode("123456789")
@@ -1358,7 +1358,7 @@ Utilidades para conversión entre binario y hexadecimal.
 #### `hexToBinary(hex: string): string`
 
 ```typescript
-import { BinaryHexConverter } from "emvcode";
+import { BinaryHexConverter } from "@somospragma/emvcode";
 
 const binary = BinaryHexConverter.hexToBinary("FF");
 console.log(binary); // '11111111'
@@ -1384,7 +1384,7 @@ console.log(hex2); // 'a'
 ### Ejemplo 1: QR de Pago Simple
 
 ```typescript
-import { EMVCoContentSemanticBuilder, QRCodeService } from "emvcode";
+import { EMVCoContentSemanticBuilder, QRCodeService } from "@somospragma/emvcode";
 
 async function generarQRPago() {
   const emv = new EMVCoContentSemanticBuilder();
@@ -1419,7 +1419,7 @@ import {
   HashCodeBuilder,
   EMVField,
   QRCodeService,
-} from "emvcode";
+} from "@somospragma/emvcode";
 
 async function generarQRSeguro() {
   const ACQUIRER = "COM.CO.MIPAGO";
@@ -1472,7 +1472,7 @@ async function generarQRSeguro() {
 ### Ejemplo 3: QR con Impuestos
 
 ```typescript
-import { EMVCoContentSemanticBuilder } from "emvcode";
+import { EMVCoContentSemanticBuilder } from "@somospragma/emvcode";
 
 function generarQRConImpuestos() {
   const ACQUIRER = "COM.CO.MIPAGO";
@@ -1505,7 +1505,7 @@ function generarQRConImpuestos() {
 ### Ejemplo 4: Validación de QR
 
 ```typescript
-import { CRCService } from "emvcode";
+import { CRCService } from "@somospragma/emvcode";
 
 function validarQR(qrString: string): boolean {
   // Validar CRC

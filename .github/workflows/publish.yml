@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      NPM_REGISTRY_URL: ${{ secrets.PRAGMA_NPM_REGISTRY_URL }}
+      NODE_AUTH_TOKEN: ${{ secrets.PRAGMA_NPM_AUTH_TOKEN }}
 
     steps:
       - name: Checkout repository
@@ -20,12 +23,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: ${{ secrets.PRAGMA_NPM_REGISTRY_URL }}
+          registry-url: ${{ env.NPM_REGISTRY_URL }}
 
       - name: Configure Artifactory credentials
         run: |
-          REGISTRY_HOST=$(echo "${{ secrets.PRAGMA_NPM_REGISTRY_URL }}" | sed 's|https:||')
-          npm config set "${REGISTRY_HOST}:_authToken" "${{ secrets.PRAGMA_NPM_AUTH_TOKEN }}"
+          REGISTRY_URL="${NPM_REGISTRY_URL%/}"
+          REGISTRY_AUTH="${REGISTRY_URL#http://}"
+          REGISTRY_AUTH="${REGISTRY_AUTH#https://}"
+
+          npm config set registry "${REGISTRY_URL}/"
+          npm config set "//${REGISTRY_AUTH}/:_authToken" "${NODE_AUTH_TOKEN}"
           npm config set always-auth true
 
       - name: Install dependencies
@@ -38,6 +45,4 @@ jobs:
         run: npm test
 
       - name: Publish package
-        run: npm publish --access restricted
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.PRAGMA_NPM_AUTH_TOKEN }}
+        run: npm publish --registry "${NPM_REGISTRY_URL}"

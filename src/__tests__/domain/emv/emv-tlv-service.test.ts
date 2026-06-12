@@ -84,5 +84,32 @@ describe('EMVTLVService', () => {
       const nodes = EMVTLVService.parse(input);
       expect(nodes[0].subtags).toBeUndefined();
     });
+
+    it('should parse TLV nodes from QR base64', () => {
+      const input = '000201010212520454115303840';
+      const base64 = EMVTLVService.toBase64(input, {
+        errorCorrectionLevel: 'L',
+      });
+
+      expect(EMVTLVService.parseBase64(base64)).toEqual([
+        { tag: '00', length: 2, value: '01' },
+        { tag: '01', length: 2, value: '12' },
+        { tag: '52', length: 4, value: '5411' },
+        { tag: '53', length: 3, value: '840' },
+      ]);
+    });
+
+    it('should stringify TLV nodes before creating QR base64', () => {
+      const nodes = [
+        { tag: '00', length: 2, value: '01' },
+        { tag: '62', length: 6, subtags: [{ tag: '01', length: 2, value: 'AB' }] },
+      ];
+
+      const base64 = EMVTLVService.toBase64(nodes, {
+        errorCorrectionLevel: 'L',
+      });
+
+      expect(EMVTLVService.parseBase64(base64)).toEqual(nodes);
+    });
   });
 });

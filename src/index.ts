@@ -1,4 +1,3 @@
-
 // Application Layer
 export { EMVCoContentBuilder } from "./application/emv-builder";
 export { EMVCoContentSemanticBuilder } from "./application/emv-semantic-builder";
@@ -28,6 +27,7 @@ export { BinaryToPng } from "./domain/qr/infrastructure/binary-png";
 // Legacy exports for backward compatibility
 export { EMVCoContentBuilder as EMVCoQRContentBuilder } from "./application/emv-builder";
 export { EMVCoContentSemanticBuilder as EMVCoQrContentSemanticBuilder } from "./application/emv-semantic-builder";
+export { EMVTLVService } from "./domain/emv/services/emv-tlv-service";
 
 export { QRCodeService as QrCodeImage } from "./domain/qr/services/qr-code-service";
 export { CRCService as Crc } from "./domain/crypto/services/crc-service";

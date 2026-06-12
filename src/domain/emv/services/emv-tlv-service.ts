@@ -1,3 +1,5 @@
+import { QRCodeService, QRConfig, QRDecodeConfig } from "../../qr/services/qr-code-service";
+
 export interface TLVNode {
   tag: string;
   length: number;
@@ -50,6 +52,30 @@ export class EMVTLVService {
     return result;
   }
 
+  static parseBase64(input: string, config?: QRDecodeConfig): TLVNode[] {
+    return this.parse(QRCodeService.decodeBase64(input, config));
+  }
+
+  static stringify(nodes: TLVNode[]): string {
+    return nodes.map((node) => this.stringifyNode(node)).join("");
+  }
+
+  static toBase64(
+    input: string | TLVNode[],
+    config: Omit<QRConfig, "content"> = {},
+    genericImage?: boolean
+  ): string {
+    const content = typeof input === "string" ? input : this.stringify(input);
+
+    return QRCodeService.createBase64(
+      {
+        ...config,
+        content,
+      },
+      genericImage
+    );
+  }
+
   private static tryParseSubTLV(value: string): TLVSubTag[] | null {
     const subtags: TLVSubTag[] = [];
     let offset = 0;
@@ -79,5 +105,19 @@ export class EMVTLVService {
     }
 
     return offset === value.length ? subtags : null;
+  }
+
+  private static stringifyNode(node: TLVNode): string {
+    const value = node.subtags
+      ? node.subtags.map((subtag) => this.stringifySubTag(subtag)).join("")
+      : node.value ?? "";
+
+    return `${node.tag}${value.length.toString().padStart(2, "0")}${value}`;
+  }
+
+  private static stringifySubTag(subtag: TLVSubTag): string {
+    return `${subtag.tag}${subtag.value.length
+      .toString()
+      .padStart(2, "0")}${subtag.value}`;
   }
 }

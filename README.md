@@ -2,8 +2,7 @@
 
 **Herramientas de desarrollo EMVCo para aplicaciones de pago modernas**
 
-[![npm version](https://img.shields.io/npm/v/@somospragma/emvcode.svg)](https://www.npmjs.com/package/@somospragma/emvcode)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://img.shields.io/npm/v/@somospragma/emvcode.svg)](https://www.npmjs.com/package/@pragmasa/emvcode)
 
 EMVCode es una librería completa para trabajar con códigos QR EMVCo, tags EMV, validación CRC y generación de códigos de seguridad. Perfecta para desarrollar aplicaciones de pago, billeteras digitales y sistemas de cobro.
 
@@ -12,7 +11,7 @@ EMVCode es una librería completa para trabajar con códigos QR EMVCo, tags EMV,
 ## 📦 Instalación
 
 ```bash
-npm install @somospragma/emvcode
+npm i @pragmasa/emvcode
 ```
 
 ---
@@ -561,6 +560,130 @@ emv.setDiscountApplicationGui("COM.CO.MIPAGO.DISC");
 ```typescript
 emv.setDiscountApplication("5000");
 ```
+
+---
+
+### EMVTLVService
+
+Servicio utilitario para leer, construir y convertir payloads EMV en formato TLV
+(`tag` + `length` + `value`). Es útil cuando necesitas inspeccionar un QR EMVCo
+existente, transformar sus tags o generar una imagen QR desde una estructura ya
+parseada.
+
+#### `parse(input: string): TLVNode[]`
+
+Convierte un string TLV en una lista de nodos. Si el valor de un tag contiene
+subtags TLV válidos, el servicio los retorna en la propiedad `subtags`; si no,
+retorna el valor plano en `value`.
+
+```typescript
+import { EMVTLVService } from "@somospragma/emvcode";
+
+const nodes = EMVTLVService.parse(
+  "0002010102125204541153031705405500005802CO5909MI TIENDA6006BOGOTA",
+);
+
+console.log(nodes);
+// [
+//   { tag: "00", length: 2, value: "01" },
+//   { tag: "01", length: 2, value: "12" },
+//   { tag: "52", length: 4, value: "5411" },
+//   ...
+// ]
+```
+
+#### `stringify(nodes: TLVNode[]): string`
+
+Convierte una lista de nodos TLV nuevamente a string. La longitud se calcula con
+base en el valor o los subtags, por lo que no necesitas actualizarla manualmente.
+
+```typescript
+import { EMVTLVService } from "@somospragma/emvcode";
+
+const payload = EMVTLVService.stringify([
+  { tag: "00", length: 2, value: "01" },
+  { tag: "01", length: 2, value: "12" },
+  {
+    tag: "26",
+    length: 0,
+    subtags: [
+      { tag: "00", length: 0, value: "COM.MIPAGO.ID" },
+      { tag: "01", length: 0, value: "123456789" },
+    ],
+  },
+  { tag: "52", length: 4, value: "5411" },
+  { tag: "53", length: 3, value: "170" },
+  { tag: "58", length: 2, value: "CO" },
+  { tag: "59", length: 9, value: "MI TIENDA" },
+  { tag: "60", length: 6, value: "BOGOTA" },
+]);
+
+console.log(payload);
+// "00020101021226300013COM.MIPAGO.ID01091234567895204541153031705802CO5909MI TIENDA6006BOGOTA"
+```
+
+#### `parseBase64(input: string, config?: QRDecodeConfig): TLVNode[]`
+
+Decodifica un QR generado en Base64 con `QRCodeService` y luego parsea su
+contenido TLV.
+
+```typescript
+const nodes = EMVTLVService.parseBase64(qrBase64, {
+  errorCorrectionLevel: "M",
+});
+```
+
+#### `toBase64(input: string | TLVNode[], config?: Omit<QRConfig, "content">, genericImage?: boolean): string`
+
+Genera una representación Base64 de QR a partir de un string TLV o de una lista
+de nodos. Cuando recibe nodos, primero ejecuta `stringify`.
+
+```typescript
+const qrBase64 = EMVTLVService.toBase64(nodes, {
+  width: 300,
+  errorCorrectionLevel: "M",
+});
+```
+
+#### Ejemplo completo
+
+```typescript
+import { EMVTLVService } from "@somospragma/emvcode";
+
+const nodes = [
+  { tag: "00", length: 2, value: "01" },
+  { tag: "01", length: 2, value: "12" },
+  {
+    tag: "26",
+    length: 0,
+    subtags: [
+      { tag: "00", length: 0, value: "COM.CO.MIPAGO.LLA" },
+      { tag: "01", length: 0, value: "27899526" },
+    ],
+  },
+  { tag: "52", length: 4, value: "5411" },
+  { tag: "53", length: 3, value: "170" },
+  { tag: "54", length: 5, value: "50000" },
+  { tag: "58", length: 2, value: "CO" },
+  { tag: "59", length: 9, value: "MI TIENDA" },
+  { tag: "60", length: 6, value: "BOGOTA" },
+];
+
+const tlv = EMVTLVService.stringify(nodes);
+const parsed = EMVTLVService.parse(tlv);
+const qrBase64 = EMVTLVService.toBase64(parsed, {
+  width: 300,
+  errorCorrectionLevel: "M",
+});
+
+console.log(tlv);
+console.log(qrBase64);
+```
+
+**Errores comunes:**
+
+- `Invalid length for tag XX` - La longitud del tag no es numérica.
+- `Length mismatch on tag XX` - El valor real no coincide con la longitud declarada.
 
 ---
 

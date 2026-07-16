@@ -147,9 +147,6 @@ const fs = require("node:fs");
 
     console.log("\nSemantic b64:", semanticB64);
 
-    console.log("Semantic b64 decoded to tlv nodes: \n",JSON.stringify(emvcode.EMVTLVService.parseBase64(semanticB64),null,2));
-
-
     const trimmedBase64 = semanticB64.slice(2);
     const binaryRaw = emvcode.BinaryToPng.base64ToBinary(trimmedBase64);
     const binary = binaryRaw.replaceAll(/\s+/g, "");

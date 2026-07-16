@@ -1,24 +1,38 @@
 {
   "name": "@pragmasa/emvcode",
   "version": "1.0.0",
-  "description": "EMVCo dev tools",
+  "description": "EMVCo development tools",
   "keywords": [
-    "EMVCo",
+    "emvco",
     "payment",
-    "card",
+    "qr",
+    "emv",
     "typescript"
   ],
   "license": "Apache-2.0",
   "author": "Juan Bautista",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/somospragma/backend-architecture-desing-ts-emvco-qr.git"
+  },
+  "homepage": "https://github.com/somospragma/backend-architecture-desing-ts-emvco-qr#readme",
+  "bugs": {
+    "url": "https://github.com/somospragma/backend-architecture-desing-ts-emvco-qr/issues"
+  },
+
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+
   "files": [
     "dist/**/*"
   ],
+
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
-    "access": "restricted"
+    "access": "public"
   },
+
   "scripts": {
     "clean": "rimraf dist",
     "build": "tsc && node scripts/obfuscate.js",
@@ -29,12 +43,15 @@
     "dev": "ts-node src/index.ts",
     "obfuscate": "node scripts/obfuscate.js"
   },
+
   "engines": {
     "node": ">=16.0.0"
   },
+
   "dependencies": {
     "dijkstrajs": "1.0.3"
   },
+
   "devDependencies": {
     "@types/jest": "29.5.0",
     "@types/node": "20.0.0",
